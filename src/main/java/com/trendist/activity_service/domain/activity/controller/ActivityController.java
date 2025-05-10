@@ -3,7 +3,7 @@ package com.trendist.activity_service.domain.activity.controller;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
@@ -23,6 +22,7 @@ import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByT
 import com.trendist.activity_service.domain.activity.service.ActivityService;
 import com.trendist.activity_service.domain.activity.service.BookmarkService;
 import com.trendist.activity_service.global.response.ApiResponse;
+import com.trendist.activity_service.global.response.status.ErrorStatus;
 import com.trendist.activity_service.global.response.status.SuccessStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,15 +71,17 @@ public class ActivityController {
 		description = "사용자가 활동글을 북마크에 추가합니다."
 	)
 	@PostMapping("/{activityId}/bookmark")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ApiResponse<Void> bookmarkActivity(
+	public ResponseEntity<ApiResponse<Void>> bookmarkActivity(
 		@PathVariable UUID activityId,
 		@RequestHeader("User-Id") UUID userId) {
 		boolean added = bookmarkService.addBookmark(userId, activityId);
 		if (added) {
-			return ApiResponse.of(SuccessStatus._BOOKMARK_ADDED, null);
+			return ResponseEntity.status(SuccessStatus._BOOKMARK_ADDED.getHttpStatus())
+				.body(ApiResponse.of(SuccessStatus._BOOKMARK_ADDED, null));
 		} else {
-			return ApiResponse.of(SuccessStatus._BOOKMARK_ALREADY_EXISTS, null);
+			return ResponseEntity.status(ErrorStatus._BOOKMARK_ALREADY_EXISTS.getHttpStatus())
+				.body(ApiResponse.onFailure(ErrorStatus._BOOKMARK_ALREADY_EXISTS.getCode(),
+					ErrorStatus._BOOKMARK_ALREADY_EXISTS.getMessage(), null));
 		}
 	}
 
@@ -88,14 +90,17 @@ public class ActivityController {
 		description = "사용자가 북마크한 활동글을 북마크에서 삭제합니다."
 	)
 	@DeleteMapping("/{activityId}/bookmark")
-	public ApiResponse<Void> removeBookmark(
+	public ResponseEntity<ApiResponse<Void>> removeBookmark(
 		@PathVariable UUID activityId,
 		@RequestHeader("User-Id") UUID userId) {
 		boolean removed = bookmarkService.removeBookmark(userId, activityId);
 		if (removed) {
-			return ApiResponse.of(SuccessStatus._BOOKMARK_REMOVED, null);
+			return ResponseEntity.status(SuccessStatus._BOOKMARK_REMOVED.getHttpStatus())
+				.body(ApiResponse.of(SuccessStatus._BOOKMARK_REMOVED, null));
 		} else {
-			return ApiResponse.of(SuccessStatus._BOOKMARK_NOT_FOUND, null);
+			return ResponseEntity.status(ErrorStatus._BOOKMARK_NOT_FOUND.getHttpStatus())
+				.body(ApiResponse.onFailure(ErrorStatus._BOOKMARK_NOT_FOUND.getCode(),
+					ErrorStatus._BOOKMARK_NOT_FOUND.getMessage(), null));
 		}
 	}
 
