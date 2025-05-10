@@ -16,7 +16,7 @@ public record ActivityGetAllResponse(
 	ActivityType activityType,
 	Keyword keyword,
 	String siteUrl,
-	String imageUrls,
+	String imageUrl,
 	LocalDateTime startDate,
 	LocalDateTime endDate
 ) {
@@ -27,7 +27,7 @@ public record ActivityGetAllResponse(
 			.activityType(activity.getActivityType())
 			.keyword(activity.getKeyword())
 			.siteUrl(activity.getSiteUrl())
-			.imageUrls(activity.getImageUrl())
+			.imageUrl(activity.getImageUrl())
 			.startDate(activity.getStartDate())
 			.endDate(activity.getEndDate())
 			.build();
