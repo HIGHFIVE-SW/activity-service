@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.trendist.activity_service.global.response.ApiResponse;
 import com.trendist.activity_service.domain.s3.dto.request.PresignedUrlRequest;
 import com.trendist.activity_service.domain.s3.dto.response.PresignedUrlResponse;
 import com.trendist.activity_service.domain.s3.service.PresignedUrlService;
+import com.trendist.activity_service.global.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
