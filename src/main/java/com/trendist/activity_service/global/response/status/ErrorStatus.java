@@ -27,6 +27,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	_TIER_NOT_FOUND(HttpStatus.NOT_FOUND, "TIER_001", "해당 티어를 찾을 수 없습니다."),
 
 	_ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY_001", "해당 활동글이 존재하지 않습니다."),
+	_BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY_002", "북마크를 찾을 수 없습니다."),
 
 	_S3_OVER_MAX_FILES(HttpStatus.BAD_REQUEST, "s3_001", "최대 파일 수를 초과하였습니다.");
 
