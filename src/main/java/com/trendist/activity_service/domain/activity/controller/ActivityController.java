@@ -62,15 +62,4 @@ public class ActivityController {
 		return ApiResponse.onSuccess(activityService.getActivitiesByKeyword(keyword, page));
 	}
 
-	@Operation(
-		summary = "특정 활동글 조회 및 리다이렉트",
-		description = "사용자가 특정 활동글을 클릭하면 해당 활동의 사이트로 리다이렉트합니다."
-	)
-	@GetMapping("/{activityId}")
-	public ResponseEntity<Void> redirectToActivity(@PathVariable UUID activityId) {
-		Activity activity = activityService.getActivityForRedirect(activityId);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(URI.create(activity.getSiteUrl()));
-		return new ResponseEntity<>(headers, HttpStatus.FOUND);
-	}
 }
