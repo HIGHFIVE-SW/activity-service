@@ -28,6 +28,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
 	_ACTIVITY_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY_001", "해당 활동글이 존재하지 않습니다."),
 	_BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "ACTIVITY_002", "북마크를 찾을 수 없습니다."),
+	_BOOKMARK_ALREADY_EXISTS(HttpStatus.CONFLICT, "ACTIVITY_003", "이미 북마크가 존재합니다."),
+	_BOOKMARK_ALREADY_DELETED(HttpStatus.GONE, "ACTIVITY_004", "이미 삭제된 북마크입니다."),
 
 	_S3_OVER_MAX_FILES(HttpStatus.BAD_REQUEST, "s3_001", "최대 파일 수를 초과하였습니다.");
 
