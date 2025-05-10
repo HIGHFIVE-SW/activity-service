@@ -4,6 +4,16 @@ server:
 spring:
   application:
     name: activity-service
+  cloud:
+    aws:
+      region:
+        static: ap-northeast-2
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 5000
+            read-timeout: 5000
   datasource:
     url: ${DB_URL}
     username: root
@@ -13,7 +23,7 @@ spring:
     database: mysql
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -30,7 +40,15 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-server-uri: http://localhost:8081
+aws:
+  s3:
+    accessKey: ${S3_ACCESS_KEY}
+    secretKey: ${S3_SECRET_KEY}
+    bucketName: ${S3_BUCKET}
+    region: ap-northeast-2
+    prefix: activities
 
-
+server-uri: http://localhost:8082

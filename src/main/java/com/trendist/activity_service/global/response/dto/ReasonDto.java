@@ -10,10 +10,10 @@ import lombok.Getter;
 @Builder
 public class ReasonDto {
 
-	private HttpStatus httpStatus;
 	private final boolean isSuccess;
 	private final String code;
 	private final String message;
+	private HttpStatus httpStatus;
 
 	public boolean getIsSuccess() {
 		return isSuccess;
