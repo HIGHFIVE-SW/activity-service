@@ -18,36 +18,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(
-	name = "bookmarks",
-	uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"user_id", "activity_id"})
-	}
+	name = "activity_bookmarks",
+	uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "activity_id"})
 )
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivityBookmark extends BaseTimeEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Column(name = "bookmark_id")
 	private UUID id;
 
-	@Column(name = "user_id")
+	@Column(name = "user_id", nullable = false)
 	private UUID userId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "activity_id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "activity_id", nullable = false)
 	private Activity activity;
-
-	public static ActivityBookmark of(UUID userId, Activity activity) {
-		return ActivityBookmark.builder()
-			.userId(userId)
-			.activity(activity)
-			.build();
-	}
 }
