@@ -42,18 +42,18 @@ public class ActivityService {
 		UUID userId = userServiceClient.getMyProfile("").getResult().id();
 		Pageable pageable = PageRequest.of(page, 12, Sort.by("createdAt").descending());
 
-		Page<Activity> issues = activityRepository.findAll(pageable);
-		List<UUID> issueIds = issues.stream()
+		Page<Activity> activities = activityRepository.findAll(pageable);
+		List<UUID> acitivityIds = activities.stream()
 			.map(Activity::getId)
 			.toList();
 
-		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId, issueIds);
+		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId, acitivityIds);
 		Set<UUID> bookmarkIds = bookmarks.stream()
 			.map(ActivityBookmark::getActivity)
 			.map(Activity::getId)
 			.collect(Collectors.toSet());
 
-		return issues.map(activity ->
+		return activities.map(activity ->
 			ActivityGetAllResponse.of(activity, bookmarkIds.contains(activity.getId())));
 	}
 
