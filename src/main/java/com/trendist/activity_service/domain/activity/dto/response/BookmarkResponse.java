@@ -1,28 +1,24 @@
 package com.trendist.activity_service.domain.activity.dto.response;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.trendist.activity_service.domain.activity.domain.Activity;
-import com.trendist.activity_service.domain.activity.domain.Keyword;
+import com.trendist.activity_service.domain.activity.domain.ActivityBookmark;
 
 import lombok.Builder;
 
 @Builder
-public record ActivityGetBookmarkedResponse(
-	UUID id,
-	String name,
-	Keyword keyword,
-	LocalDateTime startDate,
-	LocalDateTime endDate
+public record BookmarkResponse(
+	UUID bookmarkId,
+	UUID userId,
+	UUID activityId,
+	Boolean bookmarked
 ) {
-	public static ActivityGetBookmarkedResponse from(Activity activity) {
-		return ActivityGetBookmarkedResponse.builder()
-			.id(activity.getId())
-			.name(activity.getName())
-			.keyword(activity.getKeyword())
-			.startDate(activity.getStartDate())
-			.endDate(activity.getEndDate())
+	public static BookmarkResponse of(ActivityBookmark activityBookmark, boolean bookmarked) {
+		return BookmarkResponse.builder()
+			.bookmarkId(activityBookmark.getId())
+			.userId(activityBookmark.getUserId())
+			.activityId(activityBookmark.getActivity().getId())
+			.bookmarked(bookmarked)
 			.build();
 	}
 }
