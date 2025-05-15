@@ -33,7 +33,7 @@ import lombok.Setter;
 public class ActivityBookmark extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "bookmark_id")
+	@Column(name = "activity_bookmark_id")
 	private UUID id;
 
 	@Column(name = "user_id", nullable = false)
