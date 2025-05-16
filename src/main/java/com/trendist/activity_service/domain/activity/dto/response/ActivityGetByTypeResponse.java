@@ -11,18 +11,19 @@ import lombok.Builder;
 
 @Builder
 public record ActivityGetByTypeResponse(
-	UUID id,
+	UUID activityId,
 	String name,
 	ActivityType activityType,
 	Keyword keyword,
 	String siteUrl,
 	String imageUrl,
 	LocalDateTime startDate,
-	LocalDateTime endDate
+	LocalDateTime endDate,
+	Boolean bookmarked
 ) {
-	public static ActivityGetByTypeResponse from(Activity activity) {
+	public static ActivityGetByTypeResponse of(Activity activity, Boolean bookmarked) {
 		return ActivityGetByTypeResponse.builder()
-			.id(activity.getId())
+			.activityId(activity.getId())
 			.name(activity.getName())
 			.activityType(activity.getActivityType())
 			.keyword(activity.getKeyword())
@@ -30,6 +31,7 @@ public record ActivityGetByTypeResponse(
 			.imageUrl(activity.getImageUrl())
 			.startDate(activity.getStartDate())
 			.endDate(activity.getEndDate())
+			.bookmarked(bookmarked)
 			.build();
 	}
 }

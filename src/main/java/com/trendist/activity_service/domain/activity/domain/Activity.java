@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.trendist.activity_service.global.common.domain.BaseTimeEntity;
 
+import jakarta.persistence.Lob;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "activity")
+@Entity(name = "activities")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -53,4 +54,8 @@ public class Activity extends BaseTimeEntity {
 
 	@Column(name = "activity_image_url")
 	private String imageUrl;
+
+	@Lob
+	@Column(name = "activity_content", columnDefinition = "TEXT")
+	private String content;
 }
