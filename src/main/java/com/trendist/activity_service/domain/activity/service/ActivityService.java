@@ -19,6 +19,7 @@ import com.trendist.activity_service.domain.activity.domain.Keyword;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
+import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
 import com.trendist.activity_service.domain.activity.repository.ActivityBookmarkRepository;
 import com.trendist.activity_service.domain.activity.repository.ActivityRepository;
@@ -46,7 +47,8 @@ public class ActivityService {
 			.map(Activity::getId)
 			.toList();
 
-		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId, acitivityIds);
+		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
+			acitivityIds);
 		Set<UUID> bookmarkIds = bookmarks.stream()
 			.map(ActivityBookmark::getActivity)
 			.map(Activity::getId)
@@ -54,6 +56,13 @@ public class ActivityService {
 
 		return activities.map(activity ->
 			ActivityGetAllResponse.of(activity, bookmarkIds.contains(activity.getId())));
+	}
+
+	public ActivityGetResponse getActivity(UUID id) {
+		Activity activity = activityRepository.findById(id)
+			.orElseThrow(() -> new ApiException(ErrorStatus._ACTIVITY_NOT_FOUND));
+
+		return ActivityGetResponse.from(activity);
 	}
 
 	// 특정 타입의 활동글 조회

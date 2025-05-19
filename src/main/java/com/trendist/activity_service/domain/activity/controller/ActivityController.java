@@ -16,6 +16,7 @@ import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAll
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
+import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
 import com.trendist.activity_service.domain.activity.service.ActivityService;
 import com.trendist.activity_service.global.response.ApiResponse;
@@ -36,6 +37,15 @@ public class ActivityController {
 	@GetMapping
 	public ApiResponse<Page<ActivityGetAllResponse>> getAllActivities(@RequestParam(defaultValue = "0") int page) {
 		return ApiResponse.onSuccess(activityService.getAllActivities(page));
+	}
+
+	@Operation(
+		summary = "특정 활동 정보 조회",
+		description = "특정 활동의 정보를 조회합니다."
+	)
+	@GetMapping("/{activityId}")
+	public ApiResponse<ActivityGetResponse> getActivity(@PathVariable(name = "activityId") UUID activityId) {
+		return ApiResponse.onSuccess(activityService.getActivity(activityId));
 	}
 
 	@Operation(

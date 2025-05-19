@@ -43,9 +43,6 @@ public class Activity extends BaseTimeEntity {
 	@Column(name = "keyword")
 	private Keyword keyword;
 
-	@Column(name = "awards")
-	private Boolean awards;
-
 	@Column(name = "start_date")
 	private LocalDateTime startDate;
 
