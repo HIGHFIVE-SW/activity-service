@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllBookmarkedResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
