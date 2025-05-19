@@ -68,14 +68,4 @@ public class ActivityController {
 	public ApiResponse<BookmarkResponse> toggleBookmark(@PathVariable(name = "id") UUID id) {
 		return ApiResponse.onSuccess(activityService.toggleBookmark(id));
 	}
-
-	@Operation(
-		summary = "북마크한 활동글 조회",
-		description = "사용자가 북마크한 모든 활동글을 조회합니다."
-	)
-	@GetMapping("/bookmark")
-	public ApiResponse<Page<ActivityGetAllBookmarkedResponse>> getAllActivitiesBookmarked(
-		@RequestParam(defaultValue = "0") int page) {
-		return ApiResponse.onSuccess(activityService.getAllActivitiesBookmarked(page));
-	}
 }

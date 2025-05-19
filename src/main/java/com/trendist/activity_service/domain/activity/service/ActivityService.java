@@ -16,7 +16,6 @@ import com.trendist.activity_service.domain.activity.domain.Activity;
 import com.trendist.activity_service.domain.activity.domain.ActivityBookmark;
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllBookmarkedResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
@@ -126,14 +125,5 @@ public class ActivityService {
 		}
 
 		return BookmarkResponse.of(bookmark, bookmarked);
-	}
-
-	public Page<ActivityGetAllBookmarkedResponse> getAllActivitiesBookmarked(int page) {
-		UUID userId = userServiceClient.getMyProfile("").getResult().id();
-
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
-
-		return activityBookmarkRepository.findAllByUserId(userId, pageable)
-			.map(ActivityGetAllBookmarkedResponse::from);
 	}
 }
