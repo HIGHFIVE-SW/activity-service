@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllBookmarkedResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
+import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
 import com.trendist.activity_service.domain.activity.service.ActivityService;
 import com.trendist.activity_service.global.response.ApiResponse;
@@ -36,6 +36,15 @@ public class ActivityController {
 	@GetMapping
 	public ApiResponse<Page<ActivityGetAllResponse>> getAllActivities(@RequestParam(defaultValue = "0") int page) {
 		return ApiResponse.onSuccess(activityService.getAllActivities(page));
+	}
+
+	@Operation(
+		summary = "특정 활동 정보 조회",
+		description = "특정 활동의 정보를 조회합니다."
+	)
+	@GetMapping("/{activityId}")
+	public ApiResponse<ActivityGetResponse> getActivity(@PathVariable(name = "activityId") UUID activityId) {
+		return ApiResponse.onSuccess(activityService.getActivity(activityId));
 	}
 
 	@Operation(
@@ -67,15 +76,5 @@ public class ActivityController {
 	@PostMapping("{id}/bookmark")
 	public ApiResponse<BookmarkResponse> toggleBookmark(@PathVariable(name = "id") UUID id) {
 		return ApiResponse.onSuccess(activityService.toggleBookmark(id));
-	}
-
-	@Operation(
-		summary = "북마크한 활동글 조회",
-		description = "사용자가 북마크한 모든 활동글을 조회합니다."
-	)
-	@GetMapping("/bookmark")
-	public ApiResponse<Page<ActivityGetAllBookmarkedResponse>> getAllActivitiesBookmarked(
-		@RequestParam(defaultValue = "0") int page) {
-		return ApiResponse.onSuccess(activityService.getAllActivitiesBookmarked(page));
 	}
 }

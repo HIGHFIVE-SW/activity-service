@@ -16,10 +16,10 @@ import com.trendist.activity_service.domain.activity.domain.Activity;
 import com.trendist.activity_service.domain.activity.domain.ActivityBookmark;
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllBookmarkedResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
+import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
 import com.trendist.activity_service.domain.activity.repository.ActivityBookmarkRepository;
 import com.trendist.activity_service.domain.activity.repository.ActivityRepository;
@@ -47,7 +47,8 @@ public class ActivityService {
 			.map(Activity::getId)
 			.toList();
 
-		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId, acitivityIds);
+		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
+			acitivityIds);
 		Set<UUID> bookmarkIds = bookmarks.stream()
 			.map(ActivityBookmark::getActivity)
 			.map(Activity::getId)
@@ -55,6 +56,13 @@ public class ActivityService {
 
 		return activities.map(activity ->
 			ActivityGetAllResponse.of(activity, bookmarkIds.contains(activity.getId())));
+	}
+
+	public ActivityGetResponse getActivity(UUID id) {
+		Activity activity = activityRepository.findById(id)
+			.orElseThrow(() -> new ApiException(ErrorStatus._ACTIVITY_NOT_FOUND));
+
+		return ActivityGetResponse.from(activity);
 	}
 
 	// 특정 타입의 활동글 조회
@@ -126,14 +134,5 @@ public class ActivityService {
 		}
 
 		return BookmarkResponse.of(bookmark, bookmarked);
-	}
-
-	public Page<ActivityGetAllBookmarkedResponse> getAllActivitiesBookmarked(int page) {
-		UUID userId = userServiceClient.getMyProfile("").getResult().id();
-
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
-
-		return activityBookmarkRepository.findAllByUserId(userId, pageable)
-			.map(ActivityGetAllBookmarkedResponse::from);
 	}
 }
