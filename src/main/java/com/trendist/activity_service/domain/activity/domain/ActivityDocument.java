@@ -18,14 +18,14 @@ public class ActivityDocument {
 	private String id;
 
 	@MultiField(
-		mainField = @Field(name = "name", type = FieldType.Text, analyzer = "standard"),
+		mainField = @Field(name = "activity_name", type = FieldType.Text, analyzer = "standard"),
 		otherFields = {
 			@InnerField(suffix = "keyword", type = FieldType.Keyword)
 		}
 	)
 	private String name;
 
-	@Field(name = "image_url",type = FieldType.Keyword)
+	@Field(name = "activity_image_url",type = FieldType.Keyword)
 	private String imageUrl;
 
 	@Field(name = "site_url", type = FieldType.Keyword)

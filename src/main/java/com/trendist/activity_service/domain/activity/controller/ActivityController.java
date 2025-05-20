@@ -16,6 +16,7 @@ import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAll
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
+import com.trendist.activity_service.domain.activity.dto.response.ActivitySearchResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
 import com.trendist.activity_service.domain.activity.service.ActivityService;
 import com.trendist.activity_service.global.response.ApiResponse;
@@ -76,5 +77,17 @@ public class ActivityController {
 	@PostMapping("{id}/bookmark")
 	public ApiResponse<BookmarkResponse> toggleBookmark(@PathVariable(name = "id") UUID id) {
 		return ApiResponse.onSuccess(activityService.toggleBookmark(id));
+	}
+
+	@Operation(
+		summary = "활동 검색",
+		description = "사용자가 활동에 특정 단어를 입력하여 해당하는 활동을 검색합니다"
+	)
+	@GetMapping("/search")
+	public ApiResponse<Page<ActivitySearchResponse>> searchActivities(
+		@RequestParam String keyword,
+		@RequestParam(defaultValue = "0") int page
+	) {
+		return ApiResponse.onSuccess(activityService.searchActivities(keyword, page));
 	}
 }
