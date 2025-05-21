@@ -55,4 +55,7 @@ public class Activity extends BaseTimeEntity {
 	@Lob
 	@Column(name = "activity_content", columnDefinition = "TEXT")
 	private String content;
+
+	@Enumerated(EnumType.STRING)
+	private ActivitySite activitySite;
 }
