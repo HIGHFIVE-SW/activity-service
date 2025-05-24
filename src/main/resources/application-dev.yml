@@ -2,15 +2,13 @@ server:
   port: 8082
 
 spring:
-  profiles:
-    active: local
   application:
     name: activity-service
 
   datasource:
-    url: ${DB_URL}
+    url: ENC(TQ4u8D1ug5NJ8MDVxjDy6shfB8qsfNsMSak6zPQDeF+HlIlBXi8tT0cdGetXTRLmVGQxOSym8akOFIqhppabqPoTDoAf4d92Lywk+5nSbyZ1A/s40WwrD96d95o5cdAG)
     username: admin
-    password: ${DB_PASSWORD}
+    password: ENC(Pag+SPYxXay74V9DyM0BFgqcUvxG3DNy)
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -23,7 +21,7 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: http://158.180.74.204:9200
     connection-timeout: 1000
 
   sql:
@@ -35,8 +33,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://61.109.236.137:8761/eureka
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-server-uri: http://localhost:8082
+server-uri: http://61.109.236.137:8082
