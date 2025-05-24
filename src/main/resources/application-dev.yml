@@ -37,4 +37,4 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
-server-uri: http://61.109.236.137:8082
+server-uri: http://61.109.236.137:8000
