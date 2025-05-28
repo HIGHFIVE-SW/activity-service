@@ -6,7 +6,7 @@ spring:
     name: activity-service
 
   datasource:
-    url: ENC(TQ4u8D1ug5NJ8MDVxjDy6shfB8qsfNsMSak6zPQDeF+HlIlBXi8tT0cdGetXTRLmVGQxOSym8akOFIqhppabqPoTDoAf4d92Lywk+5nSbyZ1A/s40WwrD96d95o5cdAG)
+    url: ENC(NXbnGzent+JMJUr4SrEmmqbNcsWQ+H5g2Yq+GFSTx2uWTxOI4riFPNv+ctEBiML3lEqXzUdPvOcUkP6vTuKonKWoWrFn99wG7DoNGpKLMQRuBixxxUM5mLdfpb6QJfEs)
     username: admin
     password: ENC(Pag+SPYxXay74V9DyM0BFgqcUvxG3DNy)
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,7 +21,7 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
   elasticsearch:
-    uris: http://158.180.74.204:9200
+    uris: http://210.109.81.201:9200
     connection-timeout: 1000
 
   sql:
