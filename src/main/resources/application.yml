@@ -23,7 +23,7 @@ spring:
         use_sql_comments: true
     defer-datasource-initialization: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: http://210.109.81.201:9200
     connection-timeout: 1000
 
   sql:
