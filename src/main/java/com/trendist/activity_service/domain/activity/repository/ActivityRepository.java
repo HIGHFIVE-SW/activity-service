@@ -14,4 +14,10 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 	Page<Activity> findByActivityType(ActivityType activityType, Pageable pageable);
 
 	Page<Activity> findByKeyword(Keyword keyword, Pageable pageable);
+
+	Page<Activity> findAllByKeywordAndActivityType(
+		Keyword keyword,
+		ActivityType activityType,
+		Pageable pageable
+	);
 }

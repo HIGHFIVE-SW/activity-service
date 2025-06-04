@@ -24,8 +24,6 @@ import com.trendist.activity_service.domain.activity.domain.ActivityDocument;
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivitySearchResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
@@ -47,18 +45,31 @@ public class ActivityService {
 	private final UserServiceClient userServiceClient;
 	private final ElasticsearchOperations esOps;
 
-	// 모든 활동글 조회
-	public Page<ActivityGetAllResponse> getAllActivities(int page) {
+	public Page<ActivityGetAllResponse> getActivities(
+		Keyword keyword,
+		ActivityType activityType,
+		int page) {
 		UUID userId = userServiceClient.getMyProfile("").getResult().id();
 		Pageable pageable = PageRequest.of(page, 12, Sort.by("createdAt").descending());
 
-		Page<Activity> activities = activityRepository.findAll(pageable);
-		List<UUID> acitivityIds = activities.stream()
+		Page<Activity> activities;
+
+		if (keyword != null && activityType != null) {
+			activities = activityRepository.findAllByKeywordAndActivityType(keyword, activityType, pageable);
+		} else if (keyword != null) {
+			activities = activityRepository.findByKeyword(keyword, pageable);
+		} else if (activityType != null) {
+			activities = activityRepository.findByActivityType(activityType, pageable);
+		} else {
+			activities = activityRepository.findAll(pageable);
+		}
+
+		List<UUID> activityIds = activities.stream()
 			.map(Activity::getId)
 			.toList();
 
 		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
-			acitivityIds);
+			activityIds);
 		Set<UUID> bookmarkIds = bookmarks.stream()
 			.map(ActivityBookmark::getActivity)
 			.map(Activity::getId)
@@ -73,48 +84,6 @@ public class ActivityService {
 			.orElseThrow(() -> new ApiException(ErrorStatus._ACTIVITY_NOT_FOUND));
 
 		return ActivityGetResponse.from(activity);
-	}
-
-	// 특정 타입의 활동글 조회
-	public Page<ActivityGetByTypeResponse> getActivitiesByType(ActivityType activityType, int page) {
-		UUID userId = userServiceClient.getMyProfile("").getResult().id();
-		Pageable pageable = PageRequest.of(page, 12, Sort.by("createdAt").descending());
-
-		Page<Activity> activities = activityRepository.findByActivityType(activityType, pageable);
-		List<UUID> activityIds = activities.stream()
-			.map(Activity::getId)
-			.toList();
-
-		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
-			activityIds);
-		Set<UUID> bookmarkIds = bookmarks.stream()
-			.map(ActivityBookmark::getActivity)
-			.map(Activity::getId)
-			.collect(Collectors.toSet());
-
-		return activities.map(activity ->
-			ActivityGetByTypeResponse.of(activity, bookmarkIds.contains(activity.getId())));
-	}
-
-	// 특정 키워드의 활동글 조회
-	public Page<ActivityGetByKeywordResponse> getActivitiesByKeyword(Keyword keyword, int page) {
-		UUID userId = userServiceClient.getMyProfile("").getResult().id();
-		Pageable pageable = PageRequest.of(page, 12, Sort.by("createdAt").descending());
-
-		Page<Activity> activities = activityRepository.findByKeyword(keyword, pageable);
-		List<UUID> activityIds = activities.stream()
-			.map(Activity::getId)
-			.toList();
-
-		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
-			activityIds);
-		Set<UUID> bookmarkIds = bookmarks.stream()
-			.map(ActivityBookmark::getActivity)
-			.map(Activity::getId)
-			.collect(Collectors.toSet());
-
-		return activities.map(activity ->
-			ActivityGetByKeywordResponse.of(activity, bookmarkIds.contains(activity.getId())));
 	}
 
 	@Transactional
