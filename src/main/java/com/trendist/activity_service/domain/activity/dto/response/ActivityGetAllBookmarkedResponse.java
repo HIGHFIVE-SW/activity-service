@@ -25,6 +25,7 @@ public record ActivityGetAllBookmarkedResponse(
 		return ActivityGetAllBookmarkedResponse.builder()
 			.activityId(bookmark.getActivity().getId())
 			.name(bookmark.getActivity().getName())
+			.siteUrl(bookmark.getActivity().getSiteUrl())
 			.activityType(bookmark.getActivity().getActivityType())
 			.keyword(bookmark.getActivity().getKeyword())
 			.startDate(bookmark.getActivity().getStartDate())
