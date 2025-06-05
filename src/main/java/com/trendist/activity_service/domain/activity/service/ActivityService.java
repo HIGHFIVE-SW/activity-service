@@ -99,7 +99,7 @@ public class ActivityService {
 		Collections.shuffle(allActivities);
 		List<Activity> activities = allActivities.stream()
 			.limit(4)
-			.collect(Collectors.toList());
+			.toList();
 
 		List<UUID> activityIds = activities.stream()
 			.map(Activity::getId)
