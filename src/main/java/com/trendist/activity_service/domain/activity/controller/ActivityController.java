@@ -56,7 +56,7 @@ public class ActivityController {
 		description = "마감 기한이 넘지 않은 특정 키워드에 해당하는 활동 4개를 조회합니다.")
 	@GetMapping("/keyword/{keyword}")
 	public ApiResponse<List<ActivityGetAllResponse>> getActivitiesByKeyword(
-		@PathVariable(name = "keyword") Keyword keyword
+		@PathVariable Keyword keyword
 	) {
 		return ApiResponse.onSuccess(activityService.getActivitiesByKeyword(keyword));
 	}
