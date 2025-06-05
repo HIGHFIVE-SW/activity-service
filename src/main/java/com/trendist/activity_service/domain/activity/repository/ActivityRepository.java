@@ -1,6 +1,9 @@
 package com.trendist.activity_service.domain.activity.repository;
 
 import java.util.UUID;
+import java.util.List;
+
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +23,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 		ActivityType activityType,
 		Pageable pageable
 	);
+
+	List<Activity> findByKeywordAndEndDateAfter(Keyword keyword, LocalDateTime endDate);
 }

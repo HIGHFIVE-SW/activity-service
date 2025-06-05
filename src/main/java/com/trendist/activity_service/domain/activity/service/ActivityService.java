@@ -1,11 +1,13 @@
 package com.trendist.activity_service.domain.activity.service;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -84,6 +86,35 @@ public class ActivityService {
 			.orElseThrow(() -> new ApiException(ErrorStatus._ACTIVITY_NOT_FOUND));
 
 		return ActivityGetResponse.from(activity);
+	}
+
+	public List<ActivityGetAllResponse> getActivitiesByKeyword(Keyword keyword) {
+		UUID userId = userServiceClient.getMyProfile("").getResult().id();
+
+		List<Activity> allActivities = activityRepository.findByKeywordAndEndDateAfter(
+			keyword,
+			LocalDateTime.now()
+		);
+
+		Collections.shuffle(allActivities);
+		List<Activity> activities = allActivities.stream()
+			.limit(4)
+			.collect(Collectors.toList());
+
+		List<UUID> activityIds = activities.stream()
+			.map(Activity::getId)
+			.toList();
+
+		List<ActivityBookmark> bookmarks = activityBookmarkRepository.findAllByUserIdAndActivity_IdIn(userId,
+			activityIds);
+		Set<UUID> bookmarkIds = bookmarks.stream()
+			.map(ActivityBookmark::getActivity)
+			.map(Activity::getId)
+			.collect(Collectors.toSet());
+
+		return activities.stream()
+			.map(activity -> ActivityGetAllResponse.of(activity, bookmarkIds.contains(activity.getId())))
+			.collect(Collectors.toList());
 	}
 
 	@Transactional

@@ -1,6 +1,7 @@
 package com.trendist.activity_service.domain.activity.controller;
 
 import java.util.UUID;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,16 @@ public class ActivityController {
 		@RequestParam(required = false) ActivityType activityType
 	){
 		return ApiResponse.onSuccess(activityService.getActivities(keyword, activityType, page));
+	}
+
+	@Operation(
+		summary = "특정 키워드에 해당하는 활동 4개 조회",
+		description = "마감 기한이 넘지 않은 특정 키워드에 해당하는 활동 4개를 조회합니다.")
+	@GetMapping("/keyword/{keyword}")
+	public ApiResponse<List<ActivityGetAllResponse>> getActivitiesByKeyword(
+		@PathVariable(name = "keyword") Keyword keyword
+	) {
+		return ApiResponse.onSuccess(activityService.getActivitiesByKeyword(keyword));
 	}
 
 	@Operation(
