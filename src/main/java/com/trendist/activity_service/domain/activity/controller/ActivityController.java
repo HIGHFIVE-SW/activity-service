@@ -1,6 +1,7 @@
 package com.trendist.activity_service.domain.activity.controller;
 
 import java.util.UUID;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.trendist.activity_service.domain.activity.domain.ActivityType;
 import com.trendist.activity_service.domain.activity.domain.Keyword;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetAllResponse;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByKeywordResponse;
-import com.trendist.activity_service.domain.activity.dto.response.ActivityGetByTypeResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivityGetResponse;
 import com.trendist.activity_service.domain.activity.dto.response.ActivitySearchResponse;
 import com.trendist.activity_service.domain.activity.dto.response.BookmarkResponse;
@@ -31,15 +30,6 @@ public class ActivityController {
 	private final ActivityService activityService;
 
 	@Operation(
-		summary = "활동글 전체 조회",
-		description = "전체 활동글을 조회합니다."
-	)
-	@GetMapping
-	public ApiResponse<Page<ActivityGetAllResponse>> getAllActivities(@RequestParam(defaultValue = "0") int page) {
-		return ApiResponse.onSuccess(activityService.getAllActivities(page));
-	}
-
-	@Operation(
 		summary = "특정 활동 정보 조회",
 		description = "특정 활동의 정보를 조회합니다."
 	)
@@ -49,25 +39,26 @@ public class ActivityController {
 	}
 
 	@Operation(
-		summary = "특정 종류 활동글 조회",
-		description = "사용자가 특정 종류의 활동글을 조회합니다."
+		summary = "활동글 조회",
+		description = "활동글을 특정 조건에 따라 조회합니다."
 	)
-	@GetMapping("/type/{activityType}")
-	public ApiResponse<Page<ActivityGetByTypeResponse>> getActivitiesByType(
-		@PathVariable ActivityType activityType,
-		@RequestParam(defaultValue = "0") int page) {
-		return ApiResponse.onSuccess(activityService.getActivitiesByType(activityType, page));
+	@GetMapping
+	public ApiResponse<Page<ActivityGetAllResponse>> getActivities(
+		@RequestParam(defaultValue = "0") int page,
+		@RequestParam(required = false) Keyword keyword,
+		@RequestParam(required = false) ActivityType activityType
+	){
+		return ApiResponse.onSuccess(activityService.getActivities(keyword, activityType, page));
 	}
 
 	@Operation(
-		summary = "특정 키워드 활동글 조회",
-		description = "사용자가 특정 키워드에 해당하는 활동글을 조회합니다."
-	)
+		summary = "특정 키워드에 해당하는 활동 4개 조회",
+		description = "마감 기한이 넘지 않은 특정 키워드에 해당하는 활동 4개를 조회합니다.")
 	@GetMapping("/keyword/{keyword}")
-	public ApiResponse<Page<ActivityGetByKeywordResponse>> getActivitiesByKeyword(
-		@PathVariable Keyword keyword,
-		@RequestParam(defaultValue = "0") int page) {
-		return ApiResponse.onSuccess(activityService.getActivitiesByKeyword(keyword, page));
+	public ApiResponse<List<ActivityGetAllResponse>> getActivitiesByKeyword(
+		@PathVariable Keyword keyword
+	) {
+		return ApiResponse.onSuccess(activityService.getActivitiesByKeyword(keyword));
 	}
 
 	@Operation(
