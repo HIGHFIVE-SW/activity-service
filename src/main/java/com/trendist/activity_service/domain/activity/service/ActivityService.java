@@ -50,7 +50,7 @@ public class ActivityService {
 		ActivityType activityType,
 		int page) {
 		UUID userId = userServiceClient.getMyProfile("").getResult().id();
-		Pageable pageable = PageRequest.of(page, 12, Sort.by("createdAt").descending());
+		Pageable pageable = PageRequest.of(page, 12, Sort.by("startDate").ascending());
 
 		Page<Activity> activities;
 
